@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/newton_raphson.dir/src/newton_raphson.cpp.o -o newton_raphson 

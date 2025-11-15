@@ -1,0 +1,3 @@
+/home/gustavo/Área de Trabalho/trabalho1_metodos1/numerical-methods/build/CMakeFiles/newton_raphson.dir
+/home/gustavo/Área de Trabalho/trabalho1_metodos1/numerical-methods/build/CMakeFiles/edit_cache.dir
+/home/gustavo/Área de Trabalho/trabalho1_metodos1/numerical-methods/build/CMakeFiles/rebuild_cache.dir
