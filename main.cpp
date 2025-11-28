@@ -2,7 +2,11 @@
 #include <vector>
 #include <iomanip>
 #include <string>
-#include "funcoes.h" 
+#include "metodos/funcoes/Funcoes.hpp" 
+#include "metodos/bisseccao/Bisseccao.hpp"
+#include "metodos/posicaoFalsa/PosicaoFalsa.hpp"
+#include "metodos/newton/NewtonRaphson.hpp"
+
 
 using namespace std;
 
@@ -84,14 +88,17 @@ int main() {
 
             // Executa apenas o(s) método(s) escolhido(s)
             if (opcao == 1 || opcao == 4) {
-                jato.res_bisseccao = calcularBisseccao(jato.parametro_a, intervalo_ini, intervalo_fim, precisao);
+                Bisseccao metodo(jato.parametro_a, intervalo_ini, intervalo_fim, precisao);
+                jato.res_bisseccao = metodo.calcular();
             }
             if (opcao == 2 || opcao == 4) {
-                jato.res_pos_falsa = calcularPosicaoFalsa(jato.parametro_a, intervalo_ini, intervalo_fim, precisao);
+                PosicaoFalsa metodo(jato.parametro_a, intervalo_ini, intervalo_fim, precisao);
+                jato.res_pos_falsa = metodo.calcular();
             }
             if (opcao == 3 || opcao == 4) {
-                double d0 = (intervalo_ini + intervalo_fim) / 2.0;
-                jato.res_newton = calcularNewton(jato.parametro_a, d0, precisao);
+                double chute_inicial = (intervalo_ini + intervalo_fim) / 2.0;
+                NewtonRaphson metodo(jato.parametro_a, chute_inicial, precisao);
+                jato.res_newton = metodo.calcular();
             }
             
             relatorios.push_back(jato);

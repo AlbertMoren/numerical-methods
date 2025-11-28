@@ -1,5 +1,5 @@
 #include <cmath>
-#include "funcoes.h"
+#include "Funcoes.hpp"
 
 // f(d) = a*d - d*ln(d)
 double funcao(double d, double a) {
