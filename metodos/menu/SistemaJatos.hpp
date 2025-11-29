@@ -3,18 +3,22 @@
 
 #include <iostream>
 #include <vector>
+#include <climits>
+#include <limits>
+#include "../funcoes/Funcoes.hpp"
 #include "ProcessadorMetodos.hpp"
 #include "Relatorio.hpp"
 
 using namespace std;
 
 class SistemaJatos {
+
 private:
-    ProcessadorMetodos processador;
     Relatorio relatorio;
 
 public:
-    SistemaJatos() : processador(2.0, 3.0, 1e-5) {}
+
+    SistemaJatos() {}
 
     void executar() {
         int opcao;
@@ -34,7 +38,7 @@ public:
             }
 
             int n;
-            cout << "Digite o numero de jatos a serem analisados nesta rodada: ";
+            cout << "Digite o numero de jatos a serem analisados: ";
             cin >> n;
 
             vector<RelatorioJato> lista;
@@ -46,10 +50,25 @@ public:
                 cout << "Digite o parametro 'a' para o Jato " << j.id << ": ";
                 cin >> j.parametro_a;
 
+                // Isolar raiz dinamicamente
+                auto intervalo = IsolarRaizInt(j.parametro_a, -100, 100);
+
+                if (intervalo.first == INT_MIN) {
+                    cout << "Nao foi possivel isolar um intervalo para o jato " 
+                         << j.id << ". Pulando...\n";
+                    continue;
+                }
+
+                // Criar o processador com intervalo certo
+                ProcessadorMetodos processador(intervalo.first, intervalo.second, 1e-5);
+
+                // Executar métodos para este jato
                 processador.executarMetodos(j, opcao);
+
                 lista.push_back(j);
             }
 
+            // Exibir relatorios
             if (opcao != 4) {
                 relatorio.imprimirSimples(lista, opcao);
             } else {
@@ -57,18 +76,17 @@ public:
                 relatorio.quadroComparativo(lista);
             }
 
-            cout << "\nEnter para continuar...";
-            cin.ignore();
+            cout << "\nPressione ENTER para continuar...";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.get();
 
         } while (true);
     }
 
     void menu() {
-        cout << endl;
-        cout << "==================================================================" << endl;
-        cout << "             SISTEMA DE ANÁLISE DE JATOS SUPERSÔNICOS             " << endl;
-        cout << "==================================================================" << endl;
+        cout << "\n==================================================================\n";
+        cout << "             SISTEMA DE ANALISE DE JATOS SUPERSONICOS             \n";
+        cout << "==================================================================\n";
         cout << "1. Bisseccao\n";
         cout << "2. Posicao Falsa\n";
         cout << "3. Newton-Raphson\n";

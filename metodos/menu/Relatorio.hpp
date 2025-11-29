@@ -5,7 +5,9 @@
 #include <iomanip>
 #include <vector>
 #include "RelatorioJato.hpp"
+
 using namespace std;
+
 class Relatorio {
 public:
 
