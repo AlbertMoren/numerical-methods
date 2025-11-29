@@ -6,6 +6,8 @@
 #include "ProcessadorMetodos.hpp"
 #include "Relatorio.hpp"
 
+using namespace std;
+
 class SistemaJatos {
 private:
     ProcessadorMetodos processador;
@@ -19,30 +21,30 @@ public:
 
         do {
             menu();
-            std::cin >> opcao;
+            cin >> opcao;
 
             if (opcao == 0) {
-                std::cout << "Encerrando...\n";
+                cout << "Encerrando...\n";
                 break;
             }
 
             if (opcao < 0 || opcao > 4) {
-                std::cout << "Opcao invalida!\n";
+                cout << "Opcao invalida!\n";
                 continue;
             }
 
             int n;
-            std::cout << "Digite o numero de jatos a serem analisados nesta rodada: ";
-            std::cin >> n;
+            cout << "Digite o numero de jatos a serem analisados nesta rodada: ";
+            cin >> n;
 
-            std::vector<RelatorioJato> lista;
+            vector<RelatorioJato> lista;
 
             for (int i = 0; i < n; i++) {
                 RelatorioJato j;
                 j.id = i + 1;
 
-                std::cout << "Digite o parametro 'a' para o Jato " << j.id << ": ";
-                std::cin >> j.parametro_a;
+                cout << "Digite o parametro 'a' para o Jato " << j.id << ": ";
+                cin >> j.parametro_a;
 
                 processador.executarMetodos(j, opcao);
                 lista.push_back(j);
@@ -55,21 +57,24 @@ public:
                 relatorio.quadroComparativo(lista);
             }
 
-            std::cout << "\nEnter para continuar...";
-            std::cin.ignore();
-            std::cin.get();
+            cout << "\nEnter para continuar...";
+            cin.ignore();
+            cin.get();
 
         } while (true);
     }
 
     void menu() {
-        std::cout << "\n======= SISTEMA DE JATOS =======\n";
-        std::cout << "1. Bisseccao\n";
-        std::cout << "2. Posicao Falsa\n";
-        std::cout << "3. Newton-Raphson\n";
-        std::cout << "4. Todos os Metodos\n";
-        std::cout << "0. Sair\n";
-        std::cout << "Opcao: ";
+        cout << endl;
+        cout << "==================================================================" << endl;
+        cout << "             SISTEMA DE ANÁLISE DE JATOS SUPERSÔNICOS             " << endl;
+        cout << "==================================================================" << endl;
+        cout << "1. Bisseccao\n";
+        cout << "2. Posicao Falsa\n";
+        cout << "3. Newton-Raphson\n";
+        cout << "4. Todos os Metodos\n";
+        cout << "0. Sair\n";
+        cout << "Opcao: ";
     }
 };
 

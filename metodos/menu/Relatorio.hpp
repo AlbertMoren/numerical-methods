@@ -5,25 +5,25 @@
 #include <iomanip>
 #include <vector>
 #include "RelatorioJato.hpp"
-
+using namespace std;
 class Relatorio {
 public:
 
     void cabecalhoSimples() {
-        std::cout << "| Jato | Parametro 'a' | Raiz Encontrada (d) | Iteracoes | Status |" << std::endl;
-        std::cout << "|------|---------------|---------------------|-----------|--------|" << std::endl;
+        cout << "| Jato | Parametro 'a' | Raiz Encontrada (d) | Iteracoes | Status |" << endl;
+        cout << "|------|---------------|---------------------|-----------|--------|" << endl;
     }
 
     void linhaSimples(int id, double a, ResultadoMetodo r) {
-        std::string status = (r.raiz > 2.0) ? "PERIGO!" : "Seguro";
-        std::cout << "| " << std::setw(4) << id << " | "
-                  << std::setw(13) << a << " | "
-                  << std::setw(19) << std::fixed << std::setprecision(6) << r.raiz << " | "
-                  << std::setw(9) << r.iteracoes << " | "
-                  << std::setw(6) << status << " |" << std::endl;
+        string status = (r.raiz > 2.0) ? "PERIGO!" : "Seguro";
+        cout << "| " << setw(4) << id << " | "
+                  << setw(13) << a << " | "
+                  << setw(19) << fixed << setprecision(6) << r.raiz << " | "
+                  << setw(9) << r.iteracoes << " | "
+                  << setw(6) << status << " |" << endl;
     }
 
-    void imprimirSimples(const std::vector<RelatorioJato>& lista, int opcao) {
+    void imprimirSimples(const vector<RelatorioJato>& lista, int opcao) {
         cabecalhoSimples();
 
         for (auto& r : lista) {
@@ -33,27 +33,27 @@ public:
         }
     }
 
-    void quadroSeguranca(const std::vector<RelatorioJato>& lista) {
-        std::cout << "QUADRO RESPOSTA (Ref: Newton)" << std::endl;
-        std::cout << "| Jato | Parametro | Deslocamento | Status |" << std::endl;
+    void quadroSeguranca(const vector<RelatorioJato>& lista) {
+        cout << "QUADRO RESPOSTA (Ref: Newton)" << endl;
+        cout << "| Jato | Parametro | Deslocamento | Status |" << endl;
 
         for (auto& r : lista) {
-            std::string status = r.res_newton.raiz > 2.0 ? "EXPLODE" : "SEGURO";
-            std::cout << "| " << r.id << " | "
+            string status = r.res_newton.raiz > 2.0 ? "EXPLODE" : "SEGURO";
+            cout << "| " << r.id << " | "
                       << r.parametro_a << " | "
-                      << std::setprecision(5) << r.res_newton.raiz << " | "
-                      << status << " |" << std::endl;
+                      << setprecision(5) << r.res_newton.raiz << " | "
+                      << status << " |" << endl;
         }
     }
 
-    void quadroComparativo(const std::vector<RelatorioJato>& rel) {
-        std::cout << "\nQUADRO COMPARATIVO" << std::endl;
-        std::cout << "| Jato | Metodo | Raiz | Iteracoes |" << std::endl;
+    void quadroComparativo(const vector<RelatorioJato>& rel) {
+        cout << "\nQUADRO COMPARATIVO" << endl;
+        cout << "| Jato | Metodo | Raiz | Iteracoes |" << endl;
 
         for (auto& r : rel) {
-            std::cout << "| " << r.id << " | Bisseccao      | " << r.res_bisseccao.raiz << " | " << r.res_bisseccao.iteracoes << " |\n";
-            std::cout << "| " << r.id << " | Posicao Falsa  | " << r.res_pos_falsa.raiz << " | " << r.res_pos_falsa.iteracoes << " |\n";
-            std::cout << "| " << r.id << " | Newton-Raphson | " << r.res_newton.raiz << " | " << r.res_newton.iteracoes << " |\n";
+            cout << "| " << r.id << " | Bisseccao      | " << r.res_bisseccao.raiz << " | " << r.res_bisseccao.iteracoes << " |\n";
+            cout << "| " << r.id << " | Posicao Falsa  | " << r.res_pos_falsa.raiz << " | " << r.res_pos_falsa.iteracoes << " |\n";
+            cout << "| " << r.id << " | Newton-Raphson | " << r.res_newton.raiz << " | " << r.res_newton.iteracoes << " |\n";
         }
     }
 };
