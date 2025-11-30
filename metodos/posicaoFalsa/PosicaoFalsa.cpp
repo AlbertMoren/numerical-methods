@@ -107,7 +107,6 @@ void PosicaoFalsa::imprimirTabela(const std::vector<LinhaPosFalsa>& tabela) cons
 
     linhaSep();
 
-    // Conteúdo das linhas (continue alinhando à esquerda)
     for (const auto& linha : tabela) {
         cout << "|"
              << setw(W) << left << linha.iter
