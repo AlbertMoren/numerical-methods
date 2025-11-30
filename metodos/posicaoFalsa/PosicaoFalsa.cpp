@@ -16,26 +16,30 @@ ResultadoMetodo PosicaoFalsa::calcular() {
     double fa = funcao(a, a_param);
     double fb = funcao(b, a_param);
 
-    // Protecao: se o intervalo encostar em zero, fa fica enorme (sentinela do log)
-    // e a falsa posicao pode estagnar. Empurra o limite esquerdo um epsilon acima de 0.
+    // Protecao: se o intervalo encostar em zero, tentar empurrar um epsilon acima.
+    // Mas manter a troca de sinal; se perder bracketing, volta para 0 (sentinela).
     if (a <= 0.0) {
         const double epsilon = 1e-6;
-        a = epsilon;
-        fa = funcao(a, a_param);
+        double fa_eps = funcao(epsilon, a_param);
+        if (fa_eps * fb < 0) {
+            a = epsilon;
+            fa = fa_eps;
+        } else {
+            a = 0.0;
+            fa = funcao(a, a_param);
+        }
     }
 
     if (fa * fb >= 0) {
         return {0.0, 0, false};
     }
 
+    std::vector<LinhaPosFalsa> tabela;   // armazena linhas da tabela
     int iter = 0;
     double x = a;
-    double fx = fa;
+    double fx = 0.0;
 
-    std::vector<LinhaPosFalsa> tabela;   // armazena linhas da tabela
-
-    while (fabs(fx) > tol && iter < maxIter) {
-
+    for (iter = 0; iter < maxIter; ++iter) {
         x = (a * fb - b * fa) / (fb - fa);
         fx = funcao(x, a_param);
 
@@ -45,7 +49,6 @@ ResultadoMetodo PosicaoFalsa::calcular() {
 
         double intervalo = fabs(b - a);
 
-        // armazenar linha na tabela
         tabela.push_back({
             iter,
             a, fa,
@@ -53,6 +56,11 @@ ResultadoMetodo PosicaoFalsa::calcular() {
             x, fx,
             intervalo
         });
+
+        if (fabs(fx) <= tol) {
+            imprimirTabela(tabela);
+            return {x, iter + 1, true};
+        }
 
         // Atualização dos limites
         if (fa * fx < 0) {
@@ -62,12 +70,10 @@ ResultadoMetodo PosicaoFalsa::calcular() {
             a = x;
             fa = fx;
         }
-
-        iter++;
     }
 
     imprimirTabela(tabela);
-    return {x, iter, true};
+    return {x, iter, false};
 }
 
 
