@@ -44,7 +44,6 @@ ResultadoMetodo Bisseccao::calcular() {
         iter++;
     }
 
-    // Imprimir tabela (somente quando usuário escolher)
     imprimirTabela(tabela);
 
     return {(a + b) / 2.0, iter, true};
@@ -82,7 +81,6 @@ void Bisseccao::imprimirTabela(const std::vector<LinhaBisseccao>& tabela) const 
 
     linhaSep();
 
-    // Conteúdo das linhas (continue alinhando à esquerda)
     for (const auto& linha : tabela) {
         cout << "|"
              << setw(W) << left << linha.iter
