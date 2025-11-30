@@ -43,42 +43,54 @@ ResultadoMetodo Bisseccao::calcular() {
         iter++;
     }
 
-    // Imprimir tabela (somente quando usuário escolher)
+    // Imprimir tabela
     imprimirTabela(tabela);
 
     return {(a + b) / 2.0, iter, true};
 }
 
-
 void Bisseccao::imprimirTabela(const std::vector<LinhaBisseccao>& tabela) const {
     using std::cout;
     using std::endl;
     using std::setw;
+    using std::left;
+    using std::right;
 
-    cout << std::scientific << std::setprecision(5);
+    // Largura para os campos numéricos em notação científica (12 caracteres)
+    const int numWidth = 12;
+    // Largura para a iteração (6 caracteres)
+    const int iterWidth = 6;
+    // Precisão científica
+    const int precision = 5;
 
-    cout << "==============================================================" << endl;
-    cout << "======================Método da Bissecção=====================" << endl;
-    cout << "==============================================================" << endl;
+    cout << std::scientific << std::setprecision(precision);
 
-    cout << "Iteracao "
-         << setw(5) << "a"
-         << setw(5) << "fa"
-         << setw(5) << "b"
-         << setw(5) << "fb"
-         << setw(5) << "x"
-         << setw(5) << "fx"
-         << setw(5) << "intervX" << endl;
+    // --- Título ---
+    cout << "==========================================================================================================" << endl;
+    cout << "======================================Método da Bissecção=================================================" << endl;
+    cout << "==========================================================================================================" << endl;
 
+    // --- Cabeçalho ---
+    cout << right // Alinha o texto do cabeçalho à direita para simular o alinhamento dos números
+         << setw(iterWidth) << "Iter."
+         << setw(numWidth) << "a"
+         << setw(numWidth) << "f(a)"
+         << setw(numWidth) << "b"
+         << setw(numWidth) << "f(b)"
+         << setw(numWidth) << "x_m"
+         << setw(numWidth) << "f(x_m)"
+         << setw(numWidth) << "I_Tam" << endl;
+    
+    // --- Linhas de Dados ---
     for (const auto& linha : tabela) {
-        cout << linha.iter << " "
-             << linha.a  << " "
-             << linha.fa << " "
-             << linha.b  << " "
-             << linha.fb << " "
-             << linha.x  << " "
-             << linha.fx << " "
-             << linha.intervalo
+        cout << setw(iterWidth) << linha.iter 
+             << setw(numWidth) << linha.a  
+             << setw(numWidth) << linha.fa 
+             << setw(numWidth) << linha.b  
+             << setw(numWidth) << linha.fb 
+             << setw(numWidth) << linha.x  
+             << setw(numWidth) << linha.fx 
+             << setw(numWidth) << linha.intervalo
              << endl;
     }
 }

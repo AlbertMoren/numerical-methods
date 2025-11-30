@@ -32,7 +32,7 @@ ResultadoMetodo NewtonRaphson::calcular() {
             f_d,       // f(x)
             d_derivada,// f'(x)
             d_novo,    // próximo x
-            erro       // erro |x_new - x_old|
+            erro       // erro
         });
 
         iter++;
@@ -55,28 +55,40 @@ void NewtonRaphson::imprimirTabela(const std::vector<LinhaNewton>& tabela) const
     using std::cout;
     using std::setw;
     using std::endl;
+    using std::right;
 
-    cout << std::scientific << std::setprecision(5);
+    // Largura para os campos numéricos em notação científica (12 caracteres)
+    const int numWidth = 12;
+    // Largura para a iteração (6 caracteres)
+    const int iterWidth = 6;
+    // Precisão científica
+    const int precision = 5;
 
-    cout << "==============================================================" << endl;
-    cout << "==================Método de Newton-Raphson====================" << endl;
-    cout << "==============================================================" << endl;
+    cout << std::scientific << std::setprecision(precision);
 
-    cout << "Iteracao "
-         << setw(5) << "x"
-         << setw(5) << "f(x)"
-         << setw(5) << "f'(x)"
-         << setw(5) << "x_novo"
-         << setw(5) << "erro"
+    // --- Título ---
+    cout << "==========================================================================================" << endl;
+    cout << "============================Método de Newton-Raphson======================================" << endl;
+    cout << "==========================================================================================" << endl;
+
+    // --- Cabeçalho ---
+    cout << right 
+         << setw(iterWidth) << "Iter."
+         << setw(numWidth) << "x_k"
+         << setw(numWidth) << "f(x_k)"
+         << setw(numWidth) << "f'(x_k)"
+         << setw(numWidth) << "x_{k+1}"
+         << setw(numWidth) << "Erro"
          << endl;
 
+    // --- Linhas de Dados ---
     for (const auto& linha : tabela) {
-        cout << linha.iter << " "
-             << linha.x      << " "
-             << linha.fx     << " "
-             << linha.dfx    << " "
-             << linha.xnovo  << " "
-             << linha.erro
+        cout << setw(iterWidth) << linha.iter 
+             << setw(numWidth) << linha.x      
+             << setw(numWidth) << linha.fx     
+             << setw(numWidth) << linha.dfx    
+             << setw(numWidth) << linha.xnovo  
+             << setw(numWidth) << linha.erro
              << endl;
     }
 }
