@@ -16,7 +16,7 @@ ResultadoMetodo Bisseccao::calcular() {
     if (fa * fb >= 0)
         return {0.0, 0, false};
 
-    std::vector<LinhaBisseccao> tabela;   // 👉 armazena todas as linhas
+    std::vector<LinhaBisseccao> tabela;   // armazena todas as linhas
 
     while (fabs(b - a) >= tolerancia && iter < maxIter) {
 
@@ -24,7 +24,7 @@ ResultadoMetodo Bisseccao::calcular() {
         double fc = funcao(c, a_param);
         double intervalo = fabs(b - a);
 
-        // 👉 guardar linha
+        // guardar linha
         tabela.push_back({
             iter, a, fa, b, fb, c, fc, intervalo
         });
@@ -43,7 +43,7 @@ ResultadoMetodo Bisseccao::calcular() {
         iter++;
     }
 
-    // 👉 Imprimir tabela (somente quando usuário escolher)
+    // Imprimir tabela (somente quando usuário escolher)
     imprimirTabela(tabela);
 
     return {(a + b) / 2.0, iter, true};
@@ -55,16 +55,20 @@ void Bisseccao::imprimirTabela(const std::vector<LinhaBisseccao>& tabela) const 
     using std::endl;
     using std::setw;
 
-    cout << std::scientific << std::setprecision(6);
+    cout << std::scientific << std::setprecision(5);
+
+    cout << "==============================================================" << endl;
+    cout << "======================Método da Bissecção=====================" << endl;
+    cout << "==============================================================" << endl;
 
     cout << "Iteracao "
-         << setw(12) << "a"
-         << setw(12) << "fa"
-         << setw(12) << "b"
-         << setw(12) << "fb"
-         << setw(12) << "x"
-         << setw(12) << "fx"
-         << setw(12) << "intervX" << endl;
+         << setw(5) << "a"
+         << setw(5) << "fa"
+         << setw(5) << "b"
+         << setw(5) << "fb"
+         << setw(5) << "x"
+         << setw(5) << "fx"
+         << setw(5) << "intervX" << endl;
 
     for (const auto& linha : tabela) {
         cout << linha.iter << " "

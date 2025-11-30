@@ -1,45 +1,97 @@
 #include "PosicaoFalsa.hpp"
 #include <cmath>
+#include <iostream>
+#include <iomanip>
 #include "funcoes/Funcoes.hpp"
 
 ResultadoMetodo PosicaoFalsa::calcular() {
-    double inicio = this->inicio;
-    double fim = this->fim;
+    double a = inicio;
+    double b = fim;
     double a_param = this->a_param;
     double tol = this->tolerancia;
     int maxIter = this->maxIter;
 
-    int iter = 0;
-
-    double fa = funcao(inicio, a_param);
-    double fb = funcao(fim, a_param);
+    double fa = funcao(a, a_param);
+    double fb = funcao(b, a_param);
 
     if (fa * fb >= 0) {
         return {0.0, 0, false};
     }
 
-    double xm = inicio;
-    double fxm = fa;
+    int iter = 0;
+    double x = a;
+    double fx = fa;
 
-    while (fabs(fxm) > tol && iter < maxIter) {
+    std::vector<LinhaPosFalsa> tabela;   // armazena linhas da tabela
 
-        xm = (inicio * fb - fim * fa) / (fb - fa);
-        fxm = funcao(xm, a_param);
+    while (fabs(fx) > tol && iter < maxIter) {
 
-        if (std::isnan(fxm)) {
+        x = (a * fb - b * fa) / (fb - fa);
+        fx = funcao(x, a_param);
+
+        if (std::isnan(fx)) {
             return {0.0, iter, false};
         }
 
-        if (fa * fxm < 0) {
-            fim = xm;
-            fb = fxm;
+        double intervalo = fabs(b - a);
+
+        // armazenar linha na tabela
+        tabela.push_back({
+            iter,
+            a, fa,
+            b, fb,
+            x, fx,
+            intervalo
+        });
+
+        // Atualização dos limites
+        if (fa * fx < 0) {
+            b = x;
+            fb = fx;
         } else {
-            inicio = xm;
-            fa = fxm;
+            a = x;
+            fa = fx;
         }
 
         iter++;
     }
 
-    return {xm, iter, true};
+    imprimirTabela(tabela);
+    return {x, iter, true};
+}
+
+
+void PosicaoFalsa::imprimirTabela(const std::vector<LinhaPosFalsa>& tabela) const {
+    using std::cout;
+    using std::endl;
+    using std::setw;
+
+    cout << std::scientific << std::setprecision(5);
+
+    cout << "==============================================================" << endl;
+    cout << "==================Método da Posição Falsa=====================" << endl;
+    cout << "==============================================================" << endl;
+    
+
+    cout << "Iteracao "
+         << setw(5) << "a"
+         << setw(5) << "fa"
+         << setw(5) << "b"
+         << setw(5) << "fb"
+         << setw(5) << "x"
+         << setw(5) << "fx"
+         << setw(5) << "intervX"
+         << endl;
+
+    for (const auto& linha : tabela) {
+        cout << linha.iter << " "
+             << linha.a  << " "
+             << linha.fa << " "
+             << linha.b  << " "
+             << linha.fb << " "
+             << linha.x  << " "
+             << linha.fx << " "
+             << linha.intervalo
+             << endl;
+    }
 }
