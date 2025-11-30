@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <cmath>
 #include <vector>
+#include "../menu/UtilsMenu.hpp"
 
 ResultadoMetodo Bisseccao::calcular() {
     int iter = 0;
@@ -56,6 +57,14 @@ void Bisseccao::imprimirTabela(const std::vector<LinhaBisseccao>& tabela) const 
     using std::left;
     using std::right;
 
+    const int W = 15;  // largura fixa das colunas
+
+    auto col = [&](const std::string& txt) {
+        return centralizar(txt, W);
+    };
+
+    titulo("Metodo da Bisseccao");
+
     // Largura para os campos numéricos em notação científica (12 caracteres)
     const int numWidth = 12;
     // Largura para a iteração (6 caracteres)
@@ -63,34 +72,34 @@ void Bisseccao::imprimirTabela(const std::vector<LinhaBisseccao>& tabela) const 
     // Precisão científica
     const int precision = 5;
 
-    cout << std::scientific << std::setprecision(precision);
+    linhaSep();
 
-    // --- Título ---
-    cout << "==========================================================================================================" << endl;
-    cout << "======================================Método da Bissecção=================================================" << endl;
-    cout << "==========================================================================================================" << endl;
+    // Cabeçalho centralizado
+    cout << "|"
+         << col("Iteracao")  << "|"
+         << col("a")         << "|"
+         << col("fa")        << "|"
+         << col("b")         << "|"
+         << col("fb")        << "|"
+         << col("x")         << "|"
+         << col("fx")        << "|"
+         << col("intervalo") << "|\n";
 
-    // --- Cabeçalho ---
-    cout << right // Alinha o texto do cabeçalho à direita para simular o alinhamento dos números
-         << setw(iterWidth) << "Iter."
-         << setw(numWidth) << "a"
-         << setw(numWidth) << "f(a)"
-         << setw(numWidth) << "b"
-         << setw(numWidth) << "f(b)"
-         << setw(numWidth) << "x_m"
-         << setw(numWidth) << "f(x_m)"
-         << setw(numWidth) << "I_Tam" << endl;
-    
-    // --- Linhas de Dados ---
+    linhaSep();
+
+    // Conteúdo das linhas (continue alinhando à esquerda)
     for (const auto& linha : tabela) {
-        cout << setw(iterWidth) << linha.iter 
-             << setw(numWidth) << linha.a  
-             << setw(numWidth) << linha.fa 
-             << setw(numWidth) << linha.b  
-             << setw(numWidth) << linha.fb 
-             << setw(numWidth) << linha.x  
-             << setw(numWidth) << linha.fx 
-             << setw(numWidth) << linha.intervalo
-             << endl;
+        cout << "|"
+             << setw(W) << left << linha.iter
+             << "|" << setw(W) << left << linha.a
+             << "|" << setw(W) << left << linha.fa
+             << "|" << setw(W) << left << linha.b
+             << "|" << setw(W) << left << linha.fb
+             << "|" << setw(W) << left << linha.x
+             << "|" << setw(W) << left << linha.fx
+             << "|" << setw(W) << left << linha.intervalo
+             << "|\n";
     }
+
+    linhaSep();
 }

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include "funcoes/Funcoes.hpp"
+#include "../menu/UtilsMenu.hpp"
+
 
 ResultadoMetodo PosicaoFalsa::calcular() {
     double a = inicio;
@@ -14,18 +16,30 @@ ResultadoMetodo PosicaoFalsa::calcular() {
     double fa = funcao(a, a_param);
     double fb = funcao(b, a_param);
 
+    // Protecao: se o intervalo encostar em zero, tentar empurrar um epsilon acima.
+    // Mas manter a troca de sinal; se perder bracketing, volta para 0 (sentinela).
+    if (a <= 0.0) {
+        const double epsilon = 1e-6;
+        double fa_eps = funcao(epsilon, a_param);
+        if (fa_eps * fb < 0) {
+            a = epsilon;
+            fa = fa_eps;
+        } else {
+            a = 0.0;
+            fa = funcao(a, a_param);
+        }
+    }
+
     if (fa * fb >= 0) {
         return {0.0, 0, false};
     }
 
+    std::vector<LinhaPosFalsa> tabela;   // armazena linhas da tabela
     int iter = 0;
     double x = a;
-    double fx = fa;
+    double fx = 0.0;
 
-    std::vector<LinhaPosFalsa> tabela;   // armazena linhas da tabela
-
-    while (fabs(fx) > tol && iter < maxIter) {
-
+    for (iter = 0; iter < maxIter; ++iter) {
         x = (a * fb - b * fa) / (fb - fa);
         fx = funcao(x, a_param);
 
@@ -35,7 +49,6 @@ ResultadoMetodo PosicaoFalsa::calcular() {
 
         double intervalo = fabs(b - a);
 
-        // armazenar linha na tabela
         tabela.push_back({
             iter,
             a, fa,
@@ -43,6 +56,11 @@ ResultadoMetodo PosicaoFalsa::calcular() {
             x, fx,
             intervalo
         });
+
+        if (fabs(fx) <= tol) {
+            imprimirTabela(tabela);
+            return {x, iter + 1, true};
+        }
 
         // Atualização dos limites
         if (fa * fx < 0) {
@@ -52,12 +70,10 @@ ResultadoMetodo PosicaoFalsa::calcular() {
             a = x;
             fa = fx;
         }
-
-        iter++;
     }
 
     imprimirTabela(tabela);
-    return {x, iter, true};
+    return {x, iter, false};
 }
 
 
@@ -67,42 +83,44 @@ void PosicaoFalsa::imprimirTabela(const std::vector<LinhaPosFalsa>& tabela) cons
     using std::setw;
     using std::right;
 
-    // Largura para os campos numéricos em notação científica (12 caracteres)
-    const int numWidth = 12;
-    // Largura para a iteração (6 caracteres)
-    const int iterWidth = 6;
-    // Precisão científica
-    const int precision = 5;
+    const int W = 15;  // largura fixa das colunas
 
-    cout << std::scientific << std::setprecision(precision);
+    auto col = [&](const std::string& txt) {
+        return centralizar(txt, W);
+    };
 
-    // --- Título ---
-    cout << "==========================================================================================================" << endl;
-    cout << "===================================Método da Posição Falsa================================================" << endl;
-    cout << "==========================================================================================================" << endl;
-    
-    // --- Cabeçalho ---
-    cout << right 
-         << setw(iterWidth) << "Iter."
-         << setw(numWidth) << "a"
-         << setw(numWidth) << "f(a)"
-         << setw(numWidth) << "b"
-         << setw(numWidth) << "f(b)"
-         << setw(numWidth) << "x_k"
-         << setw(numWidth) << "f(x_k)"
-         << setw(numWidth) << "I_Tam"
-         << endl;
+    cout << std::scientific << std::setprecision(5);
 
-    // --- Linhas de Dados ---
+    titulo("Metodo da Posicao Falsa");
+
+    linhaSep();
+
+    // Cabeçalho centralizado
+    cout << "|"
+         << col("Iteracao")  << "|"
+         << col("a")         << "|"
+         << col("fa")        << "|"
+         << col("b")         << "|"
+         << col("fb")        << "|"
+         << col("x")         << "|"
+         << col("fx")        << "|"
+         << col("intervalo") << "|\n";
+
+    linhaSep();
+
+    // Conteúdo das linhas (continue alinhando à esquerda)
     for (const auto& linha : tabela) {
-        cout << setw(iterWidth) << linha.iter 
-             << setw(numWidth) << linha.a  
-             << setw(numWidth) << linha.fa 
-             << setw(numWidth) << linha.b  
-             << setw(numWidth) << linha.fb 
-             << setw(numWidth) << linha.x  
-             << setw(numWidth) << linha.fx 
-             << setw(numWidth) << linha.intervalo
-             << endl;
+        cout << "|"
+             << setw(W) << left << linha.iter
+             << "|" << setw(W) << left << linha.a
+             << "|" << setw(W) << left << linha.fa
+             << "|" << setw(W) << left << linha.b
+             << "|" << setw(W) << left << linha.fb
+             << "|" << setw(W) << left << linha.x
+             << "|" << setw(W) << left << linha.fx
+             << "|" << setw(W) << left << linha.intervalo
+             << "|\n";
     }
+
+    linhaSep();
 }

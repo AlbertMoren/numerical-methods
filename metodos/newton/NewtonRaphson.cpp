@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
+#include "../menu/UtilsMenu.hpp"
 
 NewtonRaphson::NewtonRaphson(double a_param, double chute_inicial, double tolerancia, int maxIter)
     : MetodoNumerico(a_param, chute_inicial, 0.0, tolerancia, maxIter) {}
@@ -57,38 +58,40 @@ void NewtonRaphson::imprimirTabela(const std::vector<LinhaNewton>& tabela) const
     using std::endl;
     using std::right;
 
-    // Largura para os campos numéricos em notação científica (12 caracteres)
-    const int numWidth = 12;
-    // Largura para a iteração (6 caracteres)
-    const int iterWidth = 6;
-    // Precisão científica
-    const int precision = 5;
+    const int W = 15;  // largura fixa das colunas
 
-    cout << std::scientific << std::setprecision(precision);
+    auto col = [&](const std::string& txt) {
+        return centralizar(txt, W);
+    };
 
-    // --- Título ---
-    cout << "==========================================================================================" << endl;
-    cout << "============================Método de Newton-Raphson======================================" << endl;
-    cout << "==========================================================================================" << endl;
+    cout << std::scientific << std::setprecision(5);
 
-    // --- Cabeçalho ---
-    cout << right 
-         << setw(iterWidth) << "Iter."
-         << setw(numWidth) << "x_k"
-         << setw(numWidth) << "f(x_k)"
-         << setw(numWidth) << "f'(x_k)"
-         << setw(numWidth) << "x_{k+1}"
-         << setw(numWidth) << "Erro"
-         << endl;
+    titulo("Metodo de Newton-Raphson");
 
-    // --- Linhas de Dados ---
+    linhaSep();
+
+    // Cabeçalho centralizado
+    cout << "|"
+         << col("Iteracao")  << "|"
+         << col("x")         << "|"
+         << col("fx")        << "|"
+         << col("f'x")         << "|"
+         << col("x_novo")        << "|"
+         << col("erro") << "|\n";
+
+    linhaSep();
+
+    // Conteúdo das linhas (continue alinhando à esquerda)
     for (const auto& linha : tabela) {
-        cout << setw(iterWidth) << linha.iter 
-             << setw(numWidth) << linha.x      
-             << setw(numWidth) << linha.fx     
-             << setw(numWidth) << linha.dfx    
-             << setw(numWidth) << linha.xnovo  
-             << setw(numWidth) << linha.erro
-             << endl;
+        cout << "|"
+             << setw(W) << left << linha.iter
+             << "|" << setw(W) << left << linha.x
+             << "|" << setw(W) << left << linha.fx
+             << "|" << setw(W) << left << linha.dfx
+             << "|" << setw(W) << left << linha.xnovo
+             << "|" << setw(W) << left << linha.erro
+             << "|\n";
     }
+
+    linhaSep();
 }

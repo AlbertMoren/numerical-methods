@@ -27,14 +27,33 @@ public:
             menu();
             cin >> opcao;
 
-            if (opcao == 0) {
-                cout << "Encerrando...\n";
-                break;
+            try {
+                if (cin.fail()) {
+                    throw std::invalid_argument("Entrada invalida para o parametro 'a'.");
+                }
+            } catch (const std::invalid_argument& e) {
+                cout << "Entrada invalida! Digite um numero de 0 a 4.\n";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                continue;   // volta ao menu sem encerrar
             }
 
-            if (opcao < 0 || opcao > 4) {
-                cout << "Opcao invalida!\n";
-                continue;
+            switch (opcao) {
+
+                case 0:
+                    cout << "Encerrando...\n";
+                    return;
+
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    // Opção válida – segue o fluxo normal
+                    break;
+
+                default:
+                    cout << "Opcao invalida!\n";
+                    continue;
             }
 
             int n;
@@ -50,25 +69,35 @@ public:
                 cout << "Digite o parametro 'a' para o Jato " << j.id << ": ";
                 cin >> j.parametro_a;
 
-                // Isolar raiz dinamicamente
-                auto intervalo = IsolarRaizInt(j.parametro_a, -100, 100);
-
-                if (intervalo.first == INT_MIN) {
-                    cout << "Nao foi possivel isolar um intervalo para o jato " 
-                         << j.id << ". Pulando...\n";
+                try {
+                    if (cin.fail()) {
+                        throw std::invalid_argument("Entrada invalida para o parametro 'a'.");
+                    }
+                } catch (const std::invalid_argument& e) {
+                    cout << e.what() << " Preencha com um número valido, ex.: 1.0 .\n";
+                    cin.clear(); // Limpa o estado de falha
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta a entrada inválida
+                    i--;
                     continue;
                 }
 
-                // Criar o processador com intervalo certo
+                // Isolar raiz
+                auto intervalo = IsolarRaizInt(j.parametro_a, -100, 100);
+
+                if (intervalo.first == INT_MIN) {
+                    cout << "Nao foi possivel isolar um intervalo para o jato "
+                        << j.id << ". Pulando...\n";
+                    continue;
+                }
+
                 ProcessadorMetodos processador(intervalo.first, intervalo.second, 1e-5);
 
-                // Executar métodos para este jato
                 processador.executarMetodos(j, opcao);
 
                 lista.push_back(j);
             }
 
-            // Exibir relatorios
+            // Relatórios
             if (opcao != 4) {
                 relatorio.imprimirSimples(lista, opcao);
             } else {
@@ -84,9 +113,8 @@ public:
     }
 
     void menu() {
-        cout << "\n==================================================================\n";
-        cout << "             SISTEMA DE ANALISE DE JATOS SUPERSONICOS             \n";
-        cout << "==================================================================\n";
+
+        titulo("SISTEMA DE ANALISE DE JATOS SUPERSONICOS");
         cout << "1. Bisseccao\n";
         cout << "2. Posicao Falsa\n";
         cout << "3. Newton-Raphson\n";

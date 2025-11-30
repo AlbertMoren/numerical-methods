@@ -42,5 +42,5 @@ mkdir build
 cd build
 cmake ..
 make
-./file.out
+./sistema_jatos
 ```

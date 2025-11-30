@@ -11,4 +11,5 @@ add_executable(sistema_jatos
     metodos/funcoes/Funcoes.cpp
     metodos/newton/NewtonRaphson.cpp
     metodos/posicaoFalsa/PosicaoFalsa.cpp
+    metodos/menu/UtilsMenu.cpp
 )
