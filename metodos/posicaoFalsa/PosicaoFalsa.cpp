@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include "funcoes/Funcoes.hpp"
+#include "../menu/UtilsMenu.hpp"
+
 
 ResultadoMetodo PosicaoFalsa::calcular() {
     double a = inicio;
@@ -66,32 +68,44 @@ void PosicaoFalsa::imprimirTabela(const std::vector<LinhaPosFalsa>& tabela) cons
     using std::endl;
     using std::setw;
 
+    const int W = 15;  // largura fixa das colunas
+
+    auto col = [&](const std::string& txt) {
+        return centralizar(txt, W);
+    };
+
     cout << std::scientific << std::setprecision(5);
 
-    cout << "==============================================================" << endl;
-    cout << "==================Método da Posição Falsa=====================" << endl;
-    cout << "==============================================================" << endl;
-    
+    titulo("Metodo da Posicao Falsa");
 
-    cout << "Iteracao "
-         << setw(5) << "a"
-         << setw(5) << "fa"
-         << setw(5) << "b"
-         << setw(5) << "fb"
-         << setw(5) << "x"
-         << setw(5) << "fx"
-         << setw(5) << "intervX"
-         << endl;
+    linhaSep();
 
+    // Cabeçalho centralizado
+    cout << "|"
+         << col("Iteracao")  << "|"
+         << col("a")         << "|"
+         << col("fa")        << "|"
+         << col("b")         << "|"
+         << col("fb")        << "|"
+         << col("x")         << "|"
+         << col("fx")        << "|"
+         << col("intervalo") << "|\n";
+
+    linhaSep();
+
+    // Conteúdo das linhas (continue alinhando à esquerda)
     for (const auto& linha : tabela) {
-        cout << linha.iter << " "
-             << linha.a  << " "
-             << linha.fa << " "
-             << linha.b  << " "
-             << linha.fb << " "
-             << linha.x  << " "
-             << linha.fx << " "
-             << linha.intervalo
-             << endl;
+        cout << "|"
+             << setw(W) << left << linha.iter
+             << "|" << setw(W) << left << linha.a
+             << "|" << setw(W) << left << linha.fa
+             << "|" << setw(W) << left << linha.b
+             << "|" << setw(W) << left << linha.fb
+             << "|" << setw(W) << left << linha.x
+             << "|" << setw(W) << left << linha.fx
+             << "|" << setw(W) << left << linha.intervalo
+             << "|\n";
     }
+
+    linhaSep();
 }
