@@ -16,6 +16,14 @@ ResultadoMetodo PosicaoFalsa::calcular() {
     double fa = funcao(a, a_param);
     double fb = funcao(b, a_param);
 
+    // Protecao: se o intervalo encostar em zero, fa fica enorme (sentinela do log)
+    // e a falsa posicao pode estagnar. Empurra o limite esquerdo um epsilon acima de 0.
+    if (a <= 0.0) {
+        const double epsilon = 1e-6;
+        a = epsilon;
+        fa = funcao(a, a_param);
+    }
+
     if (fa * fb >= 0) {
         return {0.0, 0, false};
     }
