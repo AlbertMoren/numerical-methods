@@ -81,7 +81,6 @@ void NewtonRaphson::imprimirTabela(const std::vector<LinhaNewton>& tabela) const
 
     linhaSep();
 
-    // Conteúdo das linhas (continue alinhando à esquerda)
     for (const auto& linha : tabela) {
         cout << "|"
              << setw(W) << left << linha.iter
