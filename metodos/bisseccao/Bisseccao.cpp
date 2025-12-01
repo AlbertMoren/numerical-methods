@@ -38,6 +38,9 @@ ResultadoMetodo Bisseccao::calcular() {
         else
             a = c;
 
+        if (fabs(a) < 1e-12) a = (a < 0 ? -1e-12 : 1e-12);
+        if (fabs(b) < 1e-12) b = (b < 0 ? -1e-12 : 1e-12);
+
         fa = funcao(a, a_param);
         fb = funcao(b, a_param);
 

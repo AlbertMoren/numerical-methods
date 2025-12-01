@@ -12,7 +12,6 @@ double funcao(double d, double a) {
 
     // --- Proteção: valores <= 0 não fazem sentido matemático ---
     if (d <= 0) {
-        // retorna um valor MUITO GRANDE, mas proporcional e não enganoso
         return 1e6 + fabs(d);  
     }
 
@@ -40,7 +39,6 @@ double derivada(double d, double h, double a) {
     return (f_mais - f_menos) / (2 * h);
 }
 
-// isola raiz em intervalos inteiros [x, x+1]
 pair<int,int> IsolarRaizInt(double a, int ini_range, int fim_range)
 {
     for (int x = ini_range; x < fim_range; x++) {
