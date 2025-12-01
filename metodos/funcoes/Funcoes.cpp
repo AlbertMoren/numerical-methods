@@ -12,7 +12,7 @@ double funcao(double d, double a) {
 
     // --- Proteção: valores <= 0 não fazem sentido matemático ---
     if (d <= 0) {
-        return 1e6 + fabs(d);  
+        return 1;  
     }
 
     double ad = a * d;
