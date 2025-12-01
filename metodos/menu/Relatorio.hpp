@@ -40,7 +40,7 @@ public:
         string status = (r.raiz > 2.0) ? "PERIGO!" : "Seguro";
         cout << "| " << setw(13) << id << " | "
                   << setw(13) << a << " | "
-                  << setw(19) << fixed << setprecision(6) << r.raiz << " | "
+                  << setw(19) << fixed << setprecision(5) << r.raiz << " | "
                   << setw(13) << r.iteracoes << " | "
                   << setw(13) << status << " |" << endl;
     }
