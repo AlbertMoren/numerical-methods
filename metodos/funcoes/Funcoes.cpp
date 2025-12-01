@@ -9,14 +9,34 @@ using namespace std;
 
 // f(d) = a*d - d*ln(d)
 double funcao(double d, double a) {
-    if (d <= 0) return 1e9; // Proteção contra log de número negativo
-    return (a * d) - (d * log(d));
+
+    // --- Proteção: valores <= 0 não fazem sentido matemático ---
+    if (d <= 0) {
+        // retorna um valor MUITO GRANDE, mas proporcional e não enganoso
+        return 1e6 + fabs(d);  
+    }
+
+    double ad = a * d;
+    double dlog = d * log(d);
+
+    // --- Proteções contra overflow e NaN ---
+    if (!isfinite(ad) || !isfinite(dlog)) {
+        return 1e6;
+    }
+
+    return ad - dlog;
 }
 
 // Derivada Numerica
 double derivada(double d, double h, double a) {
-    double f_mais = funcao(d + h, a);
+
+    double f_mais  = funcao(d + h, a);
     double f_menos = funcao(d - h, a);
+
+    // proteção contra valores absurdos
+    if (!isfinite(f_mais) || !isfinite(f_menos))
+        return 1e6;
+
     return (f_mais - f_menos) / (2 * h);
 }
 
@@ -28,7 +48,7 @@ pair<int,int> IsolarRaizInt(double a, int ini_range, int fim_range)
         double f1 = funcao(x, a);
         double f2 = funcao(x + 1, a);
 
-        if (f1 * f2 < 0) {    // mudança de sinal
+        if (f1 * f2 < 0) {
             return {x, x+1};
         }
     }

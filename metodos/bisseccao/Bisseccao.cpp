@@ -82,7 +82,7 @@ void Bisseccao::imprimirTabela(const std::vector<LinhaBisseccao>& tabela) const 
          << col("fb")        << "|"
          << col("x")         << "|"
          << col("fx")        << "|"
-         << col("intervalo") << "|\n";
+         << col("b - a") << "|\n";
 
     linhaSep();
 

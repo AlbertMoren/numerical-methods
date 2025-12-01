@@ -104,7 +104,7 @@ void PosicaoFalsa::imprimirTabela(const std::vector<LinhaPosFalsa>& tabela) cons
          << col("fb")        << "|"
          << col("x")         << "|"
          << col("fx")        << "|"
-         << col("intervalo") << "|\n";
+         << col("b - a") << "|\n";
 
     linhaSep();
 

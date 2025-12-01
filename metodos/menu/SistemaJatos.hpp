@@ -29,17 +29,16 @@ public:
 
             try {
                 if (cin.fail()) {
-                    throw std::invalid_argument("Entrada invalida para o parametro 'a'.");
+                    throw std::invalid_argument("Entrada invalida para o menu.");
                 }
             } catch (const std::invalid_argument& e) {
                 cout << "Entrada invalida! Digite um numero de 0 a 4.\n";
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                continue;   // volta ao menu sem encerrar
+                continue;
             }
 
             switch (opcao) {
-
                 case 0:
                     cout << "Encerrando...\n";
                     return;
@@ -48,7 +47,6 @@ public:
                 case 2:
                 case 3:
                 case 4:
-                    // Opção válida – segue o fluxo normal
                     break;
 
                 default:
@@ -57,8 +55,32 @@ public:
             }
 
             int n;
-            cout << "Digite o numero de jatos a serem analisados: ";
-            cin >> n;
+            string entrada;
+
+            while (true) {
+                cout << "Digite o numero de jatos a serem analisados: ";
+                cin >> entrada;
+
+                try {
+                    for (char c : entrada) {
+                        if (!isdigit(c))
+                            throw invalid_argument("Entrada inválida");
+                    }
+
+                    n = stoi(entrada);
+
+                    if (n <= 0) {
+                        cout << "O número deve ser um inteiro positivo!\n";
+                        continue;
+                    }
+
+                    break;
+
+                } catch (...) {
+                    cout << "Entrada inválida! Digite um inteiro positivo.\n";
+                }
+            }
+
 
             vector<RelatorioJato> lista;
 
@@ -66,27 +88,23 @@ public:
                 RelatorioJato j;
                 j.id = i + 1;
 
-                cout << "Digite o parametro 'a' para o Jato " << j.id << ": ";
-                cin >> j.parametro_a;
+                while (true) {
+                    cout << "Digite o parametro 'a' para o Jato " << j.id << ": ";
+                    cin >> j.parametro_a;
 
-                try {
-                    if (cin.fail()) {
-                        throw std::invalid_argument("Entrada invalida para o parametro 'a'.");
-                    }
-                } catch (const std::invalid_argument& e) {
-                    cout << e.what() << " Preencha com um número valido, ex.: 1.0 .\n";
-                    cin.clear(); // Limpa o estado de falha
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta a entrada inválida
-                    i--;
-                    continue;
+                    if (!cin.fail())
+                        break;
+
+                    cout << "Entrada invalida! Preencha com um número valido, ex.: 1.0.\n";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 }
 
-                // Isolar raiz
                 auto intervalo = IsolarRaizInt(j.parametro_a, -100, 100);
 
                 if (intervalo.first == INT_MIN) {
                     cout << "Nao foi possivel isolar um intervalo para o jato "
-                        << j.id << ". Pulando...\n";
+                         << j.id << ". Pulando...\n";
                     continue;
                 }
 
@@ -97,7 +115,6 @@ public:
                 lista.push_back(j);
             }
 
-            // Relatórios
             if (opcao != 4) {
                 relatorio.imprimirSimples(lista, opcao);
             } else {
@@ -113,7 +130,6 @@ public:
     }
 
     void menu() {
-
         titulo("SISTEMA DE ANALISE DE JATOS SUPERSONICOS");
         cout << "1. Bisseccao\n";
         cout << "2. Posicao Falsa\n";
